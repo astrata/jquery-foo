@@ -1,5 +1,5 @@
 all:
-	for i in $$(find ./plugins/ | grep '\.js$$' | grep -v '\.min\.js$$'); do \
+	for i in $$(find ./public/plugins/ | grep '\.js$$' | grep -v '\.min\.js$$'); do \
 		min=$$(echo $$i | sed s/\.js$$/.min.js/); \
 		java -jar ./bin/yuicompressor --type js --charset utf8 $$i > $$min; \
 	done;

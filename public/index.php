@@ -89,7 +89,7 @@
 
     if ($name) {
 
-      $path = sprintf('../plugins/%s/index.json', $name);
+      $path = sprintf('./plugins/%s/index.json', $name);
 
       if (file_exists($path)) {
 
@@ -116,14 +116,14 @@
               foreach($package['script'] as $script) {
                 $space['script'][] = array(
                   'copy'  => sprintf('%s (%s). %s %s', $json['plugin_name'], $version, $json['copyright'], $json['license']),
-                  'file'  => sprintf('../plugins/%s/%s', $name, $script)
+                  'file'  => sprintf('./plugins/%s/%s', $name, $script)
                 );
               }
             }
             
             if (!empty($package['style'])) {
               foreach($package['style'] as $style) {
-                $space['style'][] = sprintf('../plugins/%s/%s', $name, $style);
+                $space['style'][] = sprintf('./plugins/%s/%s', $name, $style);
               }
             }
 

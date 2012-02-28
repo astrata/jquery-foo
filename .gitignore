@@ -1,2 +1,4 @@
 *.min.js
 conf.php
+public/jquery.foo.js
+public/jquery.js
