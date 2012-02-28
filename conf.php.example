@@ -28,14 +28,31 @@
 
 */
 
+  // Compress output using zlib.
+  define('ENABLE_GZIP',   true);
 
+  // Enable output caching.
+  define('ENABLE_CACHE',  false);
+
+  // Enable caching and remote storage (using Amazon S3).
+  define('ENABLE_STORAGE_S3', false);
+
+  // Amazon S3 credentials.
   define('STORAGE_S3_KEY',    'XXXX');
   define('STORAGE_S3_SECRET', 'YYYY');
+  
+  // This is the name of your bucket, it should be exactly the same
+  // name of the domain you're setting up.
+
+  // The cache.jsfoo.org DNS *must* point to CNAME s3.amazonaws.com.
+
+  // $ nslookup cache.jsfoo.org
+  // Non-authoritative answer:
+  // cache.jsfoo.org canonical name = s3.amazonaws.com.
+
   define('STORAGE_S3_BUCKET', 'cache.jsfoo.org');
 
-  define('CACHE_DIR',     './temp/');
-
-  define('ENABLE_GZIP',   true);
-  define('ENABLE_CACHE',  false);
+  // Just a directory the webserver can write and read.
+  define('CACHE_DIR',     '../temp/');
 
 ?>

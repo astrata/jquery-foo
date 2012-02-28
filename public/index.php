@@ -28,14 +28,14 @@
 
 */
 
-  require 'conf.php';
+  require '../conf.php';
   
   header('Content-Type: text/javascript; charset=utf-8');
 
   $loaded = array();
 
   function upload($file) {
-    require('./lib/S3/S3.php');
+    require('../lib/S3/S3.php');
 
     $s3 = new S3(STORAGE_S3_KEY, STORAGE_S3_SECRET);
 
@@ -64,7 +64,7 @@
     }
 
     if ($response) {
-      return sprintf('http://%s/%s', STORAGE_S3_BUCKET, $name);
+      return sprintf('https://%s/%s', STORAGE_S3_BUCKET, $name);
     } else {
       return false;
     }
@@ -89,7 +89,7 @@
 
     if ($name) {
 
-      $path = sprintf('./plugins/%s/index.json', $name);
+      $path = sprintf('../plugins/%s/index.json', $name);
 
       if (file_exists($path)) {
 
@@ -116,14 +116,14 @@
               foreach($package['script'] as $script) {
                 $space['script'][] = array(
                   'copy'  => sprintf('%s (%s). %s %s', $json['plugin_name'], $version, $json['copyright'], $json['license']),
-                  'file'  => sprintf('plugins/%s/%s', $name, $script)
+                  'file'  => sprintf('../plugins/%s/%s', $name, $script)
                 );
               }
             }
             
             if (!empty($package['style'])) {
               foreach($package['style'] as $style) {
-                $space['style'][] = sprintf('plugins/%s/%s', $name, $style);
+                $space['style'][] = sprintf('../plugins/%s/%s', $name, $style);
               }
             }
 
@@ -223,7 +223,7 @@
     } else {
     
       header('HTTP/1.1 301 Moved Permanently');
-      header(sprintf('Location: http://%s/%s', STORAGE_S3_BUCKET, basename($cache_file)));
+      header(sprintf('Location: https://%s/%s', STORAGE_S3_BUCKET, basename($cache_file)));
 
       /*
       if (ENABLE_GZIP) {
