@@ -64,7 +64,7 @@
     }
 
     if ($response) {
-      return sprintf('https://%s/%s', STORAGE_S3_BUCKET, $name);
+      return sprintf('http://%s/%s', STORAGE_S3_BUCKET, $name);
     } else {
       return false;
     }
@@ -223,7 +223,7 @@
     } else {
     
       header('HTTP/1.1 301 Moved Permanently');
-      header(sprintf('Location: https://%s/%s', STORAGE_S3_BUCKET, basename($cache_file)));
+      header(sprintf('Location: http://%s/%s', STORAGE_S3_BUCKET, basename($cache_file)));
 
       /*
       if (ENABLE_GZIP) {
