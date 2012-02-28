@@ -1,4 +1,4 @@
-/*
+/*!
   Copyright (c) 2012
   Written by José Carlos Nieto <xiam@menteslibres.org>
 
