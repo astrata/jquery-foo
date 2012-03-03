@@ -1,3 +1,0 @@
-[submodule "public/plugins"]
-	path = public/plugins
-  url = git://github.com/xiam/jsfoo-plugins.git
