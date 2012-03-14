@@ -10,6 +10,10 @@
   function($) {
 
     $.foo = function() {
+      $.foo.pull.apply($.foo, arguments);
+    };
+
+    $.foo.pull = function() {
       var names = [];
       
       for (var i = 0; i < arguments.length; i++) {
@@ -54,9 +58,15 @@
       var src = $(scripts[i]).attr('src');
       var match = src.match(/^(.*)jquery\.foo\.js$/);
       if (match) {
-        $.foo.root    = match[1] || '/';
+        if (!$.foo.root) {
+          $.foo.root    = match[1] || '/';
+        };
         $.foo.parent  = scripts[i];
       };
+    };
+   
+    if (typeof $.pull == 'undefined') {
+      $.pull = $.foo.pull;
     };
 
   }
