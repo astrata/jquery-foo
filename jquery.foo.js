@@ -76,5 +76,8 @@
       $.pull = $.foo.pull;
     };
 
+    /* starting up */
+    $.foo.start();
+
   }
 )(jQuery);

@@ -27,11 +27,20 @@
   SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 */
+  error_reporting(0);
 
   require '../conf.php';
 
+  if (!defined('ENABLE_STORAGE_S3')) {
+    define('ENABLE_STORAGE_S3', false);
+  }
+
   if (!defined('STORAGE_URL')) {
-    define('STORAGE_URL', 'http://'.STORAGE_S3_BUCKET.'/%s');
+    if (ENABLE_STORAGE_S3) {
+      define('STORAGE_URL', 'http://'.STORAGE_S3_BUCKET.'/%s');
+    } else {
+      define('STORAGE_URL', '%s');
+    }
   }
   
   header('Content-Type: text/javascript; charset=utf-8');
@@ -39,39 +48,42 @@
   $loaded = array();
 
   function upload($file) {
-    require('../lib/S3/S3.php');
 
-    $s3 = new S3(STORAGE_S3_KEY, STORAGE_S3_SECRET);
+    if (ENABLE_STORAGE_S3) {
 
-    $name = basename($file);
-    
-    if (ENABLE_GZIP) {
-      $response = $s3->putObject(
-        $s3->inputFile($file),
-        STORAGE_S3_BUCKET,
-        $name,
-        S3::ACL_PUBLIC_READ,
-        array(),
-        array(
-          'Content-Type'      => 'text/javascript; charset=utf-8',
-          'Content-Encoding'  => 'gzip',
-          'Vary'              => 'Accept-Encoding'
-        )
-      );
-    } else {
-      $response = $s3->putObject(
-        $s3->inputFile($file),
-        STORAGE_S3_BUCKET,
-        $name,
-        S3::ACL_PUBLIC_READ
-      );
+      require('../lib/S3/S3.php');
+
+      $s3 = new S3(STORAGE_S3_KEY, STORAGE_S3_SECRET);
+
+      $name = basename($file);
+      
+      if (ENABLE_GZIP) {
+        $response = $s3->putObject(
+          $s3->inputFile($file),
+          STORAGE_S3_BUCKET,
+          $name,
+          S3::ACL_PUBLIC_READ,
+          array(),
+          array(
+            'Content-Type'      => 'text/javascript; charset=utf-8',
+            'Content-Encoding'  => 'gzip',
+            'Vary'              => 'Accept-Encoding'
+          )
+        );
+      } else {
+        $response = $s3->putObject(
+          $s3->inputFile($file),
+          STORAGE_S3_BUCKET,
+          $name,
+          S3::ACL_PUBLIC_READ
+        );
+      }
+
+      if ($response) {
+        return sprintf(STORAGE_URL, $name);
+      }
     }
-
-    if ($response) {
-      return sprintf(STORAGE_URL, $name);
-    } else {
-      return false;
-    }
+    return false;
   }
   
   function load_plugin($name, &$space) {
@@ -120,7 +132,7 @@
               foreach($package['source'] as $script) {
                 $minified = preg_replace('/\.js$/', '.min.js', $script);
                 $space['script'][] = array(
-                  'copy'  => sprintf('%s (%s). %s %s', $json['plugin_name'], $version, $json['copyright'], $json['license']),
+                  'copy'  => sprintf('%s (%s). %s %s', $json['name'], $version, $json['copyright'], $json['license']),
                   'file'  => sprintf('./plugins/%s/%s', $name, $minified)
                 );
               }
@@ -129,7 +141,7 @@
             if (!empty($package['style'])) {
               foreach($package['style'] as $style) {
                 $minified = preg_replace('/\.css$/', '.min.css', $style);
-                $space['style'][] = sprintf('./plugins/%s/%s', $name, $style);
+                $space['style'][] = sprintf('./plugins/%s/%s', $name, $minified);
               }
             }
 
@@ -228,7 +240,7 @@
 
     } else {
     
-      $url = sprintf(STORAGE_URL, $name);
+      $url = sprintf(STORAGE_URL, basename($cache_file));
 
       header('HTTP/1.1 301 Moved Permanently');
       header(sprintf('Location: %s', $url));
