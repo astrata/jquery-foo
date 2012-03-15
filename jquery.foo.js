@@ -13,6 +13,7 @@
       $.foo.pull.apply($.foo, arguments);
     };
 
+    /* $.foo.pull(script1, script2, ...) */
     $.foo.pull = function() {
       var names = [];
       
@@ -30,41 +31,47 @@
 
     };
 
-    $.foo.styles = function(urls) {
-      for (var i = 0; i < urls.length; i++) {
+    /* $.foo.styles(style1, style2, ...) */
+    $.foo.styles = function() {
+      for (var i = 0; i < arguments.length; i++) {
         $('head').prepend($('<link />', {
           'type': 'text/css',
           'rel': 'stylesheet',
-          'href': $.foo.root + urls[i]
+          'href': $.foo.root + arguments[i]
         }));
       };
     }
     
+    /* directly taken from http://docs.jquery.com/Plugins/Authoring */
     $.foo.plugin = function(name, methods) {
       $.fn[name] = function(method) {
         if (methods[method]) {
-          return methods[method].apply(this, Array.prototype.slice.call( arguments, 1 ));
+          return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
         } else if (typeof method === 'object' || !method) {
           return methods.init.apply(this, arguments);
         } else {
-          $.error('Method ' +  method + ' does not exist on jQuery.jsonRpc');
-        }
-      };
-    };
-    
-    var scripts = $('head script');
-    
-    for (var i = 0; i < scripts.length; i++) {
-      var src = $(scripts[i]).attr('src');
-      var match = src.match(/^(.*)jquery\.foo\.js$/);
-      if (match) {
-        if (!$.foo.root) {
-          $.foo.root    = match[1] || '/';
+          $.error('Method '+method+' does not exist on jQuery.'+name);
         };
-        $.foo.parent  = scripts[i];
       };
     };
-   
+
+    /* startup */
+    $.foo.start = function() {
+      var scripts = $('head script');
+      
+      for (var i = 0; i < scripts.length; i++) {
+        var src = $(scripts[i]).attr('src');
+        var match = src.match(/^(.*)jquery\.foo\.js$/);
+        if (match) {
+          if (!$.foo.root) {
+            $.foo.root    = match[1] || '/';
+          };
+          $.foo.parent  = scripts[i];
+        };
+      };
+    };
+  
+    /* alias for $.foo.pull */
     if (typeof $.pull == 'undefined') {
       $.pull = $.foo.pull;
     };

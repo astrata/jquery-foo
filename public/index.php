@@ -29,6 +29,10 @@
 */
 
   require '../conf.php';
+
+  if (!defined('STORAGE_URL')) {
+    define('STORAGE_URL', 'http://'.STORAGE_S3_BUCKET.'/%s');
+  }
   
   header('Content-Type: text/javascript; charset=utf-8');
 
@@ -49,9 +53,9 @@
         S3::ACL_PUBLIC_READ,
         array(),
         array(
-          'Content-Type' => 'text/javascript; charset=utf-8',
-          'Content-Encoding' => 'gzip',
-          'Vary' => 'Accept-Encoding'
+          'Content-Type'      => 'text/javascript; charset=utf-8',
+          'Content-Encoding'  => 'gzip',
+          'Vary'              => 'Accept-Encoding'
         )
       );
     } else {
@@ -64,7 +68,7 @@
     }
 
     if ($response) {
-      return sprintf('http://%s/%s', STORAGE_S3_BUCKET, $name);
+      return sprintf(STORAGE_URL, $name);
     } else {
       return false;
     }
@@ -112,17 +116,19 @@
               }
             }
 
-            if (!empty($package['script'])) {
-              foreach($package['script'] as $script) {
+            if (!empty($package['source'])) {
+              foreach($package['source'] as $script) {
+                $minified = preg_replace('/\.js$/', '.min.js', $script);
                 $space['script'][] = array(
                   'copy'  => sprintf('%s (%s). %s %s', $json['plugin_name'], $version, $json['copyright'], $json['license']),
-                  'file'  => sprintf('./plugins/%s/%s', $name, $script)
+                  'file'  => sprintf('./plugins/%s/%s', $name, $minified)
                 );
               }
             }
             
             if (!empty($package['style'])) {
               foreach($package['style'] as $style) {
+                $minified = preg_replace('/\.css$/', '.min.css', $style);
                 $space['style'][] = sprintf('./plugins/%s/%s', $name, $style);
               }
             }
@@ -179,7 +185,7 @@
         ob_start();
       }
      
-      echo sprintf('$.foo.styles(%s);', json_encode($space['style']));
+      echo sprintf('$.foo.styles.apply($.foo, %s);', json_encode($space['style']));
       echo "\n\n";
       
       foreach ($space['script'] as $file) {
@@ -222,17 +228,10 @@
 
     } else {
     
+      $url = sprintf(STORAGE_URL, $name);
+
       header('HTTP/1.1 301 Moved Permanently');
-      header(sprintf('Location: http://%s/%s', STORAGE_S3_BUCKET, basename($cache_file)));
-
-      /*
-      if (ENABLE_GZIP) {
-        header('Content-Encoding: gzip');
-        header('Vary: Accept-Encoding');
-      }
-
-      readfile($cache_file);
-      */
+      header(sprintf('Location: %s', $url));
     }
 
   }
