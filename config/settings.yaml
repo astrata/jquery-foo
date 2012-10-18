@@ -1,0 +1,11 @@
+## Tango!
+##
+## App configuration
+##
+
+## Here we set options for the server.
+server:
+  type: standalone  # Type of server to spawn. "fastcgi" or "standalone".
+  # socket: /var/run/tango-app.sock # UNIX socket file (if server.type == fastcgi).
+  bind: 0.0.0.0     # Listen on all interfaces.
+  port: 9292        # Listen on port 9292.
