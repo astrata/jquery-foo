@@ -1,3 +1,4 @@
 [submodule "public/plugins"]
 	path = public/plugins
-	url = git://github.com/xiam/jsfoo-plugins.git
+	url =  git@github.com:Astrata/jquery-foo-plugins.git
+
