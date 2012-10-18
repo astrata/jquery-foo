@@ -1,0 +1,1 @@
+../jquery.foo.min.js
