@@ -1,0 +1,8 @@
+page:
+  body:
+    menu:
+      - { text: "Tutorial", url: "/tutorial" }
+      - { text: "Reference", url: "/reference" }
+      - { text: "Source code", url: "/source-code" }
+    menu_pull:
+      - { text: "Home", url: "/" }
