@@ -42,6 +42,12 @@ import (
 // Root directory for serving static files.
 var PluginsRoot = "plugins"
 
+// Plugin context
+type Context struct {
+	Loaded map[string] bool
+	Buf *bytes.Buffer
+}
+
 // Model name
 type Build struct {
 	Params tango.Value
@@ -53,6 +59,13 @@ func init() {
 	// Your initialization code goes here.
 	app.Register("Build", &Build{})
 	app.Route("/build", app.App("Build"))
+}
+
+func newContext() *Context {
+	self := &Context{}
+	self.Buf = bytes.NewBuffer(nil)
+	self.Loaded = make(map[string] bool)
+	return self
 }
 
 // Model's StartUp() function
@@ -70,6 +83,102 @@ func (self *Build) StartUp() {
 	self.pattern, _ = regexp.Compile(`[^a-z0-9\-:._,]`)
 }
 
+func (self *Build) read(file string) []byte {
+	var err error
+
+	st, err := os.Stat(file)
+
+	if err != nil {
+		return nil
+	}
+
+	fh, err := os.Open(file)
+
+	if err != nil {
+		return nil
+	}
+
+	defer fh.Close()
+
+	buf := make([]byte, st.Size())
+
+	fh.Read(buf)
+
+	return buf
+}
+
+func (self *Build) load(pkg string, ctx *Context) {
+	var err error
+	var version string
+
+	if ctx.Loaded[pkg] == true {
+		return
+	} else {
+		ctx.Loaded[pkg] = true
+	}
+
+	if strings.Contains(pkg, ":") {
+		i := strings.LastIndex(pkg, ":")
+		version = pkg[i+1:]
+		pkg = pkg[0:i]
+	}
+
+	filename := PluginsRoot + tango.PS + pkg + tango.PS + "package.yaml"
+
+	_, err = os.Stat(filename)
+
+	if err == nil {
+
+		info, err := yaml.Open(filename)
+
+		if err == nil {
+
+			if version == "" {
+				version = to.String(info.Get("latest"))
+			}
+
+			files := to.Map(info.Get(fmt.Sprintf("packages/%s", version)))
+
+			if files == nil {
+				ctx.Buf.Write([]byte(fmt.Sprintf("/* Package \"%s\" with version \"%s\" was not found. */\n", pkg, version)))
+			} else {
+
+				if files["requires"] != nil {
+					for _, req := range to.List(files["requires"]) {
+						self.load(req.(string), ctx)
+					}
+				}
+
+				ctx.Buf.Write([]byte(fmt.Sprintf("/* %s: %s. %s */\n", pkg, to.String(info.Get("name")), to.String(info.Get("copyright")))))
+
+				if files["source"] != nil {
+					for _, jsfile := range to.List(files["source"]) {
+						minfile := strings.Replace(jsfile.(string), ".js", ".min.js", 1)
+						ctx.Buf.Write(self.read(PluginsRoot + tango.PS + pkg + tango.PS + minfile))
+						ctx.Buf.Write([]byte(fmt.Sprintf("\n")))
+					}
+				}
+
+				ctx.Buf.Write([]byte(fmt.Sprintf("\n\n")))
+				if files["style"] != nil {
+					for _, cssfile := range to.List(files["style"]) {
+						ctx.Buf.Write([]byte(fmt.Sprintf("$.foo.styles.apply($.foo, \"%s\");\n", cssfile.(string))))
+					}
+				}
+			}
+
+			ctx.Buf.Write([]byte(fmt.Sprintf("\n\n")))
+
+		} else {
+			ctx.Buf.Write([]byte(fmt.Sprintf("/* Package \"%s\": metadata error. */\n", pkg)))
+		}
+	} else {
+		ctx.Buf.Write([]byte(fmt.Sprintf("/* Package \"%s\": missing. */\n", pkg)))
+	}
+
+
+}
+
 // Catches all requests and serves files.
 func (self *Build) Index() body.Body {
 
@@ -79,46 +188,15 @@ func (self *Build) Index() body.Body {
 
 	load := self.pattern.ReplaceAllString(params.Get("load"), "")
 
-	files := strings.Split(load, ",")
+	pkgs := strings.Split(load, ",")
 
-	/* Output */
-	output := bytes.NewBuffer(nil)
+	ctx := newContext()
 
-	/* Packages list */
-	pkgs := []string{}
-	var pkg string
-
-	/* Testing all files. */
-	for _, file := range files {
-		pkg = PluginsRoot + tango.PS + file + tango.PS + "package.yaml"
-
-		stat, err := os.Stat(pkg)
-
-		if err != nil || stat.IsDir() == true {
-			content.Set(fmt.Sprintf("/* Package \"%s\" was not found. */", file))
-			return content
-		}
-
-		pkgs = append(pkgs, pkg)
-	}
-
-	/* Reading package files */
 	for _, pkg := range pkgs {
-		y, err := yaml.Open(pkg)
-
-		if err != nil {
-			content.Set(fmt.Sprintf("/* Package \"%s\" is malformed. */", pkg))
-			return content
-		}
-
-		output.Write([]byte(fmt.Sprintf(
-				"/* %s */\n\n",
-				to.String(y.Get("name")),
-		)))
-
+		self.load(pkg, ctx)
 	}
 
-	content.Set(output)
+	content.Set(ctx.Buf)
 
 	return content
 }
