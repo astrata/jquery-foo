@@ -144,7 +144,8 @@
         <h1>jQuery.foo</h1>
 
         <p>
-          The <code>jQuery.foo</code> plugin allows you include many great <b>jQuery plugins</b> from <i>The Cloud&reg;</i> into your web application with minimum effort.
+          The <code>jQuery.foo</code> plugin lets you include many great <a href="/plugins">jQuery plugins</a> from the cloud
+          into your web app with ease.
         </p>
       </div>
 
