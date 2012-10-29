@@ -1,21 +1,20 @@
 all:
 	for i in $$(find ./plugins/ | grep '\.js$$' | grep -v '\.min\.js$$'); do \
 		min=$$(echo $$i | sed s/\.js$$/.min.js/); \
-		java -jar ./bin/yuicompressor --type js --charset utf8 $$i > $$min; \
+		java -jar ./tools/yuicompressor --type js --charset utf8 $$i > $$min; \
 	done;
 
 	for i in $$(find ./plugins/ | grep '\.css$$' | grep -v '\.min\.css$$'); do \
 		min=$$(echo $$i | sed s/\.css$$/.min.css/); \
-		java -jar ./bin/yuicompressor --type css --charset utf8 $$i > $$min; \
+		java -jar ./tools/yuicompressor --type css --charset utf8 $$i > $$min; \
 	done;
 
 	for i in $$(find ./jquery/ | grep '\.js$$' | grep -v '\.min\.js$$'); do \
 		min=$$(echo $$i | sed s/\.js$$/.min.js/); \
-		java -jar ./bin/yuicompressor --type js --charset utf8 $$i > $$min; \
+		java -jar ./tools/yuicompressor --type js --charset utf8 $$i > $$min; \
 	done;
 
-	java -jar ./bin/yuicompressor --type js --charset utf8 jquery.foo.js > jquery.foo.min.js;
+	java -jar ./tools/yuicompressor --type js --charset utf8 jquery.foo.js > static/jquery.foo.js;
 
-	#ln -sf ../jquery.foo.min.js jquery.foo.js;
-
-	#ln -sf ../jquery/$$(cat jquery/LATEST | sed s/\.js$$/\.min\.js/g) jquery.js;
+	cp -a ./jquery/*.min.js static/
+	cp -a ./jquery/$$(cat jquery/LATEST | sed s/\.js$$/\.min\.js/g) static/jquery.js;
