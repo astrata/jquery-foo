@@ -34,7 +34,9 @@
     <link rel="stylesheet" href="http://static.hckr.org/google-code-prettify/prettify.css" />
     <script type="text/javascript" src="http://static.hckr.org/google-code-prettify/prettify.js"></script>
 
+    <!--
     <link rel="stylesheet" href="/styles.css" />
+    -->
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
