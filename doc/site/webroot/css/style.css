@@ -1,0 +1,22 @@
+/* CSS */
+.packages .package.selected {
+  opacity: 1;
+}
+.packages .package {
+  opacity: 0.5;
+}
+.packages .package img {
+  cursor: pointer;
+}
+#package-manager textarea.input-large {
+  width: 570px !important;
+  font-size: 9pt;
+  font-family: monospace;
+}
+.packages-code p {
+  font-size: 2em;
+  font-weight: bold;
+}
+.packages .hidden {
+  display: none;
+}

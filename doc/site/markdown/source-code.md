@@ -11,7 +11,7 @@ We are open to contributions, if you have any just make a pull request ;-).
 
 Quality plugins licensed as Open Source, such as with MIT or GPL, could be
 accepted into the project following some simple conventions on directory
-structure plus an special ``index.yaml`` file.
+structure plus an special ``package.yaml`` file.
 
 ### Directory structure
 
@@ -32,7 +32,7 @@ structure plus an special ``index.yaml`` file.
       <td>Container directory for the <code>some-plugin</code> jQuery plugin.</td>
     </tr>
     <tr>
-      <td><code>jquery-foo-plugins/some-plugin/index.yaml</code></td>
+      <td><code>jquery-foo-plugins/some-plugin/package.yaml</code></td>
       <td>A specially crafted [YAML][5] file that contains plugin data and code paths.</td>
     </tr>
     <tr>
@@ -56,7 +56,7 @@ LICENSE/README files will be accepted.
 
 The ``.min.js`` files will be generated automatically based on the original ``.js`` file, please avoid including them too.
 
-### Format of the ``index.yaml`` file.
+### Format of the ``package.yaml`` file.
 
 ```yaml
 ---

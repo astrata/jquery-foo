@@ -6,96 +6,143 @@
   $.foo.pull('view');
 </script>
 
-## Packages
-
 <div id="package-manager">
 
-  <section>
-    <div class="package">
-      <h3 class="pkg-name"></h3>
+  <h2>Plugin browser</h2>
 
-      <ul>
-        <li>Author: <span class="pkg-author"></span></li>
-        <li>URL: <a target="_blank" href="" class="pkg-url"></a></li>
-      </ul>
+  <p>
+    Just click on the plugins you want to load to generate the appropriate code.
+  </p>
 
-      <button class="btn btn-small toggle">Add/Remove</button>
+  <div class="row packages-code">
+    <div class="span6">
+      <p>&lt;head&gt;</p>
+      <textarea onclick="this.select()" class="input-large" rows="10" id="head-tags"></textarea>
+      <p>&lt;/head&gt;</p>
     </div>
-  </section>
+    <div class="span6">
+      <p>&lt;body&gt;</p>
+      <textarea onclick="this.select()" class="input-large" rows="10" id="body-tags"></textarea>
+      <p>&lt;/body&gt;</p>
+    </div>
+  </div>
 
-  <textarea id="head-tags"></textarea>
-  <textarea id="body-tags"></textarea>
+  <hr />
 
-  <button class="btn generate">Generate</button>
+  <form class="form-inline" onsubmit="return false">
+    <input id="plugin-search" class="input-xlarge search-query" placeholder="Lookup plugin..." />
+  </form>
+
+  <div class="packages row">
+    <div class="package span3">
+
+      <p>
+        <img title="Click to add this plugin." src="http://placehold.it/270x152" width="270" height="152" class="img-polaroid" />
+      </p>
+
+      <a target="_blank" href="" class="pkg-url pull-right"><i class="icon-globe"></i></a>
+
+      <strong class="pkg-name"></strong>
+
+      <p>
+        <i class="icon-user"></i> <span class="pkg-author"></span>
+      </p>
+
+    </div>
+  </div>
+  <hr />
+
+  <div class="alert">
+    <h4>Are we missing a great plugin?</h4>
+    <p>
+      Please <a href="mailto:jsfoo@astrata.mx">write to us</a> so we can fix it :-).
+    </p>
+  </div>
 
   <script type="text/x-template-event">
   {
-    "button.toggle @click": function(ev) {
+    "#plugin-search @keydown": function(ev) {
+      var test = $(this).val();
+      var re = new RegExp(test, 'i');
+      var all = $('.packages .package');
+
+      for (var i = 0; i < all.length; i++) {
+        var pkg = $(all[i]);
+        if (re.test(pkg.data('name')) == true) {
+          pkg.removeClass('hidden');
+        } else {
+          pkg.addClass('hidden');
+        };
+      };
+
+    },
+    "img @click": function(ev) {
       var parent = $(this).parents('.package');
       parent.toggleClass('selected');
-    },
-    "button.generate @click": function(ev) {
-
-      var code = [
-        '<!-- Loading the jQuery library -->',
-        '<script type="text/javascript" src="http://get.jsfoo.org/jquery.js"><'+'/script>',
-        '',
-        '<!-- Loading the jQuery.foo plugin -->',
-        '<script type="text/javascript" src="http://get.jsfoo.org/jquery.foo.js"><'+'/script>',
-      ];
-
-      var selected = $('#package-manager .package.selected');
-      var plugins = [];
-
-      for (var i = 0; i < selected.length; i++) {
-        plugins.push($(selected[i]).data('name'));
-      };
-
-      if (plugins.length > 0) {
-        code.push('');
-        code.push('<!-- Loading plugins -->');
-        code.push('$.foo.pull("'+plugins.join('", "')+'");');
-      };
-
-      code = code.join("\n");
-
-      $('#head-tags').text(code);
-
-      $('#body-tags').text([
-        '<script type="text/javascript">',
-        '  $(document).ready(',
-        '    function() {',
-        '      // Initialization code here.',
-        '    }',
-        '  );',
-        '<'+'/script>'
-      ].join("\n"));
+      generateCode();
     }
   }
   </script>
   <script type="text/x-template-directive">
   {
-    "section": {
+    "div.packages": {
       "div.package": {
         "item <- data": {
           ". @data-name": "item.pkg",
           ".pkg-name": "item.name",
           ".pkg-author @text": "item.author",
-          ".pkg-url @href": "item.url",
-          ".pkg-url @text": "item.url"
+          ".pkg-url @href": "item.url"
         }
       }
     }
   }
   </script>
+
 </div>
 
 
 <script type="text/javascript">
+  var generateCode = function() {
+    var code = [
+      '<!-- Loading the jQuery library -->',
+      '<script type="text/javascript" src="http://get.jsfoo.org/jquery.js"><'+'/script>',
+      '',
+      '<!-- Loading the jQuery.foo plugin -->',
+      '<script type="text/javascript" src="http://get.jsfoo.org/jquery.foo.js"><'+'/script>',
+    ];
+
+    var selected = $('#package-manager .package.selected');
+    var plugins = [];
+
+    for (var i = 0; i < selected.length; i++) {
+      plugins.push($(selected[i]).data('name'));
+    };
+
+    if (plugins.length > 0) {
+      code.push('');
+      code.push('<!-- Loading plugins -->');
+      code.push('$.foo.pull("'+plugins.join('", "')+'");');
+    };
+
+    code = code.join("\n");
+
+    $('#head-tags').text(code);
+
+    $('#body-tags').text([
+      '<script type="text/javascript">',
+      '  $(document).ready(',
+      '    function() {',
+      '      // Initialization code here.',
+      '    }',
+      '  );',
+      '<'+'/script>'
+    ].join("\n"));
+  };
   $(document).ready(
     function() {
       $('#package-manager').view();
       $('#package-manager').view('render', { data: packages });
+      generateCode();
     }
   );
 </script>

@@ -34,9 +34,7 @@
     <link rel="stylesheet" href="http://static.hckr.org/google-code-prettify/prettify.css" />
     <script type="text/javascript" src="http://static.hckr.org/google-code-prettify/prettify.js"></script>
 
-    <!--
-    <link rel="stylesheet" href="/styles.css" />
-    -->
+    <link rel="stylesheet" href="/css/style.css" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -153,7 +151,7 @@
 
       <div class="container-fluid">
         <div class="row">
-          <div class="span11">
+          <div class="span12">
             {{ .ContentHeader }}
 
             {{ .Content }}
