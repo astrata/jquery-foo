@@ -1,6 +1,6 @@
 # Get the source
 
-Jsfoo is an [Open Source][1] project sponsored by [Astrata Software][2].
+Jsfoo is an [Open Source][1] project sponsored by [Astrata][2].
 
 The FastCGI daemon is written in [Go][4] and the source code is [available at our github page][3].
 

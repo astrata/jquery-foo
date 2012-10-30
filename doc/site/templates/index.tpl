@@ -137,10 +137,6 @@
 
       <div class="project-header">
 
-        <p class="pull-right">
-          <a href="https://github.com/xiam/jquery-foo" target="_blank" class="btn btn-large btn-primary">Source code</a>
-        </p>
-
         <h1>jQuery.foo</h1>
 
         <p>
@@ -230,7 +226,7 @@
     <hr />
 
     <footer>
-      <i>jsfoo.org</i> is sponsored by <a href="http://astrata.mx" target="_blank">astrata</a>.
+      <i>jsfoo</i> is sponsored by <a href="http://astrata.mx" target="_blank">astrata</a>.
     </footer>
 
   </body>

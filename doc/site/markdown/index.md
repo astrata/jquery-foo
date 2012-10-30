@@ -1,4 +1,4 @@
-## Unleash *$.foo*
+## Unleash *jQuery.foo*
 
 Add ``jquery.js`` and ``jquery.foo.js`` to the ``HEAD`` of your template.
 
@@ -12,7 +12,7 @@ Add ``jquery.js`` and ``jquery.foo.js`` to the ``HEAD`` of your template.
 
 ## Pull the plugins you need
 
-Use ``$.foo.pull`` to load jQuery plugins into your web app.
+Use ``$.foo.pull()`` to load jQuery plugins into your web app.
 
 ```html
 <!-- Add to HEAD -->

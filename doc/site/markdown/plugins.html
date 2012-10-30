@@ -11,7 +11,7 @@
   <h2>Plugin browser</h2>
 
   <p>
-    Just click on the plugins you want to load to generate the appropriate code.
+    This is a tool for generating <code>script</code> tags, just click on the plugins to generate code that you can then embed in your web application.
   </p>
 
   <div class="row packages-code">
@@ -109,6 +109,7 @@
       '',
       '<!-- Loading the jQuery.foo plugin -->',
       '<script type="text/javascript" src="http://get.jsfoo.org/jquery.foo.js"><'+'/script>',
+      ''
     ];
 
     var selected = $('#package-manager .package.selected');
@@ -119,9 +120,12 @@
     };
 
     if (plugins.length > 0) {
-      code.push('');
-      code.push('<!-- Loading plugins -->');
-      code.push('$.foo.pull("'+plugins.join('", "')+'");');
+      code.push('<!-- jQuery plugins -->');
+      code.push('<script type="text/javascript">');
+      code.push('  $.foo.pull("'+plugins.join('", "')+'");');
+      code.push('<'+'/script>');
+    } else {
+      code.push('<!-- Click on the plugins you\'d like to use. -->');
     };
 
     code = code.join("\n");
@@ -132,7 +136,7 @@
       '<script type="text/javascript">',
       '  $(document).ready(',
       '    function() {',
-      '      // Initialization code here.',
+      '      // Start your application here.',
       '    }',
       '  );',
       '<'+'/script>'
