@@ -4,9 +4,11 @@
 }
 .packages .package {
   opacity: 0.5;
-}
-.packages .package img {
+  margin-bottom: 10px;
   cursor: pointer;
+}
+.packages .package:hover {
+  opacity: 0.8;
 }
 #package-manager textarea.input-large {
   width: 570px !important;
@@ -19,4 +21,10 @@
 }
 .packages .hidden {
   display: none;
+}
+#package-manager .snippet {
+  margin-bottom: 40px;
+}
+#package-manager .snippet {
+
 }

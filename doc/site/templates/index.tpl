@@ -135,7 +135,7 @@
 
     {{ if .IsHome }}
 
-      <div class="project-header">
+      <div class="project-header hero-unit">
 
         <h1>jQuery.foo</h1>
 
@@ -143,6 +143,7 @@
           The <code>jQuery.foo</code> plugin lets you include many great <a href="/plugins">jQuery plugins</a> from the cloud
           into your web app with ease.
         </p>
+
       </div>
 
       <div class="container-fluid">
@@ -189,7 +190,7 @@
                 {{ .ContentFooter }}
               </div>
             {{ else }}
-              <div class="span11">
+              <div class="span12">
                 {{ if .CurrentPage }}
                   <h1>{{ .CurrentPage.text }}</h1>
                 {{ end }}
@@ -203,7 +204,7 @@
               </div>
             {{ end }}
           {{ else }}
-            <div class="span11">
+            <div class="span12">
               {{ .ContentHeader }}
 
               {{ .Content }}

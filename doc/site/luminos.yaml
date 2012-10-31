@@ -1,4 +1,5 @@
 page:
+  brand: "jQuery.foo"
   body:
     menu:
       - { text: "Browse plugins", url: "/plugins" }
