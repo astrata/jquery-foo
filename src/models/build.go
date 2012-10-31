@@ -32,6 +32,7 @@ import (
 	"github.com/astrata/tango/app"
 	"github.com/astrata/tango/body"
 	"github.com/gosexy/yaml"
+	"encoding/json"
 	"github.com/gosexy/to"
 	"regexp"
 	"bytes"
@@ -41,6 +42,7 @@ import (
 
 // Root directory for serving static files.
 var PluginsRoot = "plugins"
+
 
 // Plugin context
 type Context struct {
@@ -111,6 +113,8 @@ func (self *Build) load(pkg string, ctx *Context) {
 	var err error
 	var version string
 
+	minjs, _ := regexp.Compile(`\.js$`)
+
 	if ctx.Loaded[pkg] == true {
 		return
 	} else {
@@ -153,18 +157,29 @@ func (self *Build) load(pkg string, ctx *Context) {
 
 				if files["source"] != nil {
 					for _, jsfile := range to.List(files["source"]) {
-						minfile := strings.Replace(jsfile.(string), ".js", ".min.js", 1)
+						minfile := minjs.ReplaceAllString(jsfile.(string), ".min.js")
 						ctx.Buf.Write(self.read(PluginsRoot + tango.PS + pkg + tango.PS + minfile))
 						ctx.Buf.Write([]byte(fmt.Sprintf("\n")))
 					}
 				}
 
 				ctx.Buf.Write([]byte(fmt.Sprintf("\n\n")))
+
 				if files["style"] != nil {
-					for _, cssfile := range to.List(files["style"]) {
-						ctx.Buf.Write([]byte(fmt.Sprintf("$.foo.styles.apply($.foo, \"%s\");\n", cssfile.(string))))
+
+					styles := to.List(files["style"])
+
+					cssfiles := make([]string, len(styles))
+
+					for i, _ := range styles {
+						cssfiles[i] = "media" + tango.PS + pkg + tango.PS + styles[i].(string)
 					}
+
+					css, _ := json.Marshal(cssfiles)
+
+					ctx.Buf.Write([]byte(fmt.Sprintf("$.foo.styles.apply($.foo, %s);\n", string(css))))
 				}
+
 			}
 
 			ctx.Buf.Write([]byte(fmt.Sprintf("\n\n")))
