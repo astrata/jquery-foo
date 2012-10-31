@@ -58,7 +58,7 @@ type Build struct {
 func init() {
 	// Your initialization code goes here.
 	app.Register("Build", &Build{})
-	app.Route("/build", app.App("Build"))
+	app.Route("/", app.App("Build"))
 }
 
 func newContext() *Context {
