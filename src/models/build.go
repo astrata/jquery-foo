@@ -171,7 +171,7 @@ func (self *Build) load(pkg string, ctx *Context) {
 					cssfiles := make([]string, len(styles))
 
 					for i, _ := range styles {
-						cssfiles[i] = "static" + tango.PS + "plugins" + tango.PS + pkg + tango.PS + styles[i].(string)
+						cssfiles[i] = fmt.Sprintf("plugins/%s/%s", pkg, styles[i].(string))
 					}
 
 					css, _ := json.Marshal(cssfiles)
