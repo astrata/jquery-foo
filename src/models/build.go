@@ -27,32 +27,31 @@
 package models
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"github.com/astrata/tango"
 	"github.com/astrata/tango/app"
 	"github.com/astrata/tango/body"
-	"github.com/gosexy/yaml"
-	"encoding/json"
 	"github.com/gosexy/to"
-	"regexp"
-	"bytes"
-	"strings"
+	"github.com/gosexy/yaml"
 	"os"
+	"regexp"
+	"strings"
 )
 
 // Root directory for serving static files.
-var PluginsRoot = "plugins"
-
+var PluginsRoot = "static" + tango.PS + "plugins"
 
 // Plugin context
 type Context struct {
-	Loaded map[string] bool
-	Buf *bytes.Buffer
+	Loaded map[string]bool
+	Buf    *bytes.Buffer
 }
 
 // Model name
 type Build struct {
-	Params tango.Value
+	Params  tango.Value
 	pattern *regexp.Regexp
 }
 
@@ -66,7 +65,7 @@ func init() {
 func newContext() *Context {
 	self := &Context{}
 	self.Buf = bytes.NewBuffer(nil)
-	self.Loaded = make(map[string] bool)
+	self.Loaded = make(map[string]bool)
 	return self
 }
 
@@ -172,7 +171,7 @@ func (self *Build) load(pkg string, ctx *Context) {
 					cssfiles := make([]string, len(styles))
 
 					for i, _ := range styles {
-						cssfiles[i] = "media" + tango.PS + pkg + tango.PS + styles[i].(string)
+						cssfiles[i] = "static" + tango.PS + "plugins" + tango.PS + pkg + tango.PS + styles[i].(string)
 					}
 
 					css, _ := json.Marshal(cssfiles)
@@ -190,7 +189,6 @@ func (self *Build) load(pkg string, ctx *Context) {
 	} else {
 		ctx.Buf.Write([]byte(fmt.Sprintf("/* Package \"%s\": missing. */\n", pkg)))
 	}
-
 
 }
 
