@@ -25,9 +25,13 @@
 
       $.holdReady(true);
 
+      $.ajaxSetup({cache: true});
+
       $.getScript(url, function() {
         $.holdReady(false);
       });
+
+      $.ajaxSetup({cache: false});
 
     };
 

@@ -197,6 +197,8 @@ func (self *Build) Index() body.Body {
 
 	content := body.Text()
 
+	content.Header().Set("Content-Type", "text/javascript")
+
 	params := self.Params.Filter("load")
 
 	load := self.pattern.ReplaceAllString(params.Get("load"), "")
