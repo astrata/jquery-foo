@@ -1,0 +1,3 @@
+[submodule "static/plugins"]
+	path = static/plugins
+	url = git@github.com:astrata/jquery-foo-plugins.git
