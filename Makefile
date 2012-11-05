@@ -14,7 +14,7 @@ all:
 		java -jar ./tools/yuicompressor --type js --charset utf8 $$i > $$min; \
 	done;
 
-	java -jar ./tools/yuicompressor --type js --charset utf8 jquery.foo.js > static/jquery.foo.min.js;
+	java -jar ./tools/yuicompressor --type js --charset utf8 jquery.foo.js > static/jquery.foo.js;
 
 	cp -a ./jquery/*.min.js static/
 	cp -a ./jquery/$$(cat jquery/LATEST | sed s/\.js$$/\.min\.js/g) static/jquery.js;
