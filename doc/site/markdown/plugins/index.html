@@ -21,18 +21,21 @@
           <div class="span1">
             <img title="Click to add this plugin." src="http://placehold.it/70x50" class="img-polaroid pkg-image" />
           </div>
-          <div class="span5">
+          <div class="span4">
 
             <ul class="pull-right pkg-links">
-              <li class="pkg-url-wrapper"><a class="pkg-url" target="_blank" href="#"><i class="icon-globe"></i> site</a></li>
-              <li class="pkg-demo-url-wrapper"><a class="pkg-demo-url" target="_blank" href="#"><i class="icon-play"></i> demo</a></li>
+              <li class="pkg-url-wrapper"><a class="pkg-url" target="_blank" href="#"><i class="icon-globe"></i> Main site</a></li>
+              <li class="pkg-demo-url-wrapper"><a class="pkg-demo-url" target="_blank" href="#"><i class="icon-play"></i> View demo</a></li>
             </ul>
 
-            <strong class="pkg-name"></strong>
-
-            <i class="icon-ok"></i>
+            <strong class="pkg-name"></strong> <i class="icon-ok added"></i>
 
             <p class="pkg-description"></p>
+
+            <ul class="pull-right pkg-links">
+              <li class="not-added"><a href="#" class="toggle-add"><i class="icon-ok"></i> Add to package</a></li>
+              <li class="added"><a href="#" class="toggle-add"><i class="icon-remove"></i> Remove from package</a></li>
+            </ul>
 
             <p>
               <i class="icon-user"></i> <span class="pkg-author"></span>
@@ -46,7 +49,7 @@
       <div class="alert">
         <h4>Are we missing a great plugin?</h4>
         <p>
-          Please <a href="mailto:jsfoo@astrata.mx">write to us</a> so we can fix it :-).
+          Please <a href="mailto:jsfoo@astrata.mx">send us a line</a> so we can fix it :-).
         </p>
       </div>
 
@@ -85,9 +88,12 @@
       };
 
     },
-    ".package @click": function(ev) {
-      $(this).toggleClass('selected');
+    ".package .toggle-add @click": function(ev) {
+      var parent = $(this).parents('.package');
+      $(parent).toggleClass('selected');
       generateCode();
+      ev.stopPropagation();
+      return false;
     }
   }
   </script>

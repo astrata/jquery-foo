@@ -4,11 +4,21 @@
 }
 .packages .package {
   margin-bottom: 10px;
-  cursor: pointer;
   color: #555;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 10px;
 }
 .packages .package .pkg-name {
   color: #000;
+}
+.packages .pkg-description {
+  display: block;
+  overflow: auto;
+  width: 100%;
+}
+.packages .package:hover {
+  background-color: #eee;
 }
 .packages .package .pkg-image {
   opacity: 0.3;
@@ -19,11 +29,17 @@
 .packages .package:hover .pkg-image {
   opacity: 0.7;
 }
-.packages .package i.icon-ok {
-  visibility: hidden;
+.packages .package.selected .not-added {
+  display: none;
 }
-.packages .package.selected i.icon-ok {
-  visibility: visible;
+.packages .package.selected .added {
+  display: inline;
+}
+.packages .package .added {
+  display: none;
+}
+.packages .package.selected .added {
+  display: inline;
 }
 #package-manager textarea.input-large {
   width: 570px !important;
@@ -55,4 +71,17 @@
   float: right;
   margin-left: 20px;
   font-size: small;
+}
+.hero-unit {
+  background: #eee url(img/cubes.png);
+}
+#astrata-link {
+  background: url(http://astrata.mx/css/i/logo.png) 0 -40px no-repeat;
+  height: 0;
+  width: 121px;
+  padding-top: 30px;
+  margin: 0;
+  position: relative;
+  top: -3px;
+  text-indent: -100000px;
 }

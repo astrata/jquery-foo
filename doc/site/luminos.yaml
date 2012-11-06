@@ -1,5 +1,7 @@
 page:
   brand: "jQuery.foo"
+  head:
+    title: "jQuery.foo - Plugin loader for jQuery"
   body:
     menu:
       - { text: "Browse plugins", url: "/plugins" }
