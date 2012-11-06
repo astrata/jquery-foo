@@ -33,7 +33,7 @@ structure plus an special ``package.yaml`` file.
     </tr>
     <tr>
       <td><code>jquery-foo-plugins/some-plugin/package.yaml</code></td>
-      <td>A specially crafted [YAML][5] file that contains plugin data and code paths.</td>
+      <td>A specially crafted <a href="http://yaml.org">YAML</a> file that contains plugin data and code paths.</td>
     </tr>
     <tr>
       <td><code>jquery-foo-plugins/some-plugin/1.0.0</code></td>
