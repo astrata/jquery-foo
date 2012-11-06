@@ -1,14 +1,29 @@
 /* CSS */
-.packages .package.selected {
+.packages .package.selected .pkg-image {
   opacity: 1;
 }
 .packages .package {
-  opacity: 0.5;
   margin-bottom: 10px;
   cursor: pointer;
+  color: #555;
 }
-.packages .package:hover {
-  opacity: 0.8;
+.packages .package .pkg-name {
+  color: #000;
+}
+.packages .package .pkg-image {
+  opacity: 0.3;
+}
+.packages .package .pkg-author {
+  color: #888;
+}
+.packages .package:hover .pkg-image {
+  opacity: 0.7;
+}
+.packages .package i.icon-ok {
+  visibility: hidden;
+}
+.packages .package.selected i.icon-ok {
+  visibility: visible;
 }
 #package-manager textarea.input-large {
   width: 570px !important;
@@ -27,4 +42,17 @@
 }
 #package-manager .snippet {
 
+}
+.pkg-links ul, .pkg-links li {
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+}
+.pkg-links ul {
+  overflow: auto;
+}
+.pkg-links li {
+  float: right;
+  margin-left: 20px;
+  font-size: small;
 }
